@@ -38,5 +38,13 @@ services:
       - /app/node_modules
     depends_on:
       - api
+    
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
 volumes:
   pgdata:

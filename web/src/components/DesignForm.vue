@@ -43,63 +43,103 @@ function onSubmit() {
 
 <template>
   <form class="design-form" @submit.prevent="onSubmit">
-    <label>Name <input v-model="form.name" type="text" maxlength="100" /></label>
-    <label>Cells in x <input v-model.number="form.nx" type="number" min="1" max="20" /></label>
-    <label>Cells in y <input v-model.number="form.ny" type="number" min="1" max="20" /></label>
-    <label>Cells in z <input v-model.number="form.nz" type="number" min="1" max="20" /></label>
-    <label>Cell size <input v-model.number="form.cell_size" type="number" step="any" /></label>
+    <label class="full">
+      Name
+      <input v-model="form.name" type="text" maxlength="100" />
+    </label>
     <label>
-      Strut diameter
+      Cells X
+      <input v-model.number="form.nx" type="number" min="1" max="20" />
+    </label>
+    <label>
+      Cells Y
+      <input v-model.number="form.ny" type="number" min="1" max="20" />
+    </label>
+    <label>
+      Cells Z
+      <input v-model.number="form.nz" type="number" min="1" max="20" />
+    </label>
+    <label>
+      Cell size (mm)
+      <input v-model.number="form.cell_size" type="number" step="any" />
+    </label>
+    <label class="full">
+      Strut diameter (mm)
       <input v-model.number="form.strut_diameter" type="number" step="any" />
     </label>
 
-    <p class="summary">Preview: {{ nodeCount }} nodes, {{ strutCount }} struts</p>
+    <p class="preview">
+      <span>{{ nodeCount.toLocaleString() }} nodes</span>
+      <span>{{ strutCount.toLocaleString() }} struts</span>
+    </p>
     <ul v-if="errors.length" class="errors">
       <li v-for="message in errors" :key="message">{{ message }}</li>
     </ul>
 
-    <button type="submit" :disabled="loading || errors.length > 0">Generate and save</button>
+    <button class="primary full" type="submit" :disabled="loading || errors.length > 0">
+      Generate and save
+    </button>
   </form>
 </template>
 
 <style scoped>
 .design-form {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px 24px;
-  padding: 16px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.full,
+.preview,
+.errors {
+  grid-column: 1 / -1;
 }
 
 label {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  font-size: 14px;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
 }
 
 input {
-  padding: 6px 8px;
-  border: 1px solid #9ca3af;
-  border-radius: 6px;
+  width: 100%;
+  padding: 9px 10px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 
-.summary,
-.errors,
-button {
-  grid-column: 1 / -1;
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.18);
 }
 
-.summary {
+.preview {
+  display: flex;
+  gap: 8px;
   margin: 0;
-  color: #4b5563;
+}
+
+.preview span {
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--accent);
+  background: rgba(34, 211, 238, 0.08);
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  border-radius: 999px;
 }
 
 .errors {
   margin: 0;
   padding-left: 18px;
-  color: #b91c1c;
+  font-size: 13px;
+  color: var(--danger);
 }
 </style>
